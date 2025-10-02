@@ -1,0 +1,14 @@
+name: measles-case-analysis
+dependencies:
+  - python=3.13
+  - pip
+  - pip:
+    - ipykernel
+    - pandas
+    - seaborn
+    - streamlit
+    - matplotlib
+    - plotly
+    - numpy
+    - scipy
+    - requests
