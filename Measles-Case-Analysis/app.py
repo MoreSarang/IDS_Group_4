@@ -140,6 +140,9 @@ def main():
     # Upload dataset
     csv_data = load_data()
 
+    #Display head 10
+    st.title("Display DataFrame Head (Top 10 Rows)")
+    st.dataframe(csv_data.head(10))
 
     col1, col2 = st.columns([1.2, 1.0])
     with col1:
