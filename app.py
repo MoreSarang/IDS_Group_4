@@ -171,6 +171,87 @@ if "measles" in base_wide.columns:
 else:
     st.info("Measles field not available for heatmap in the uploaded file.")
 
+# ===== ANOMALY DETECTION SECTION =====
+st.markdown("---")
+st.subheader("🔍 Anomaly Detection")
+st.markdown("Detect unusual patterns in disease case data using Isolation Forest")
+
+# Sidebar controls for anomaly detection
+st.sidebar.header("Anomaly Detection")
+run_anomaly = st.sidebar.checkbox("Enable anomaly detection", value=False)
+contamination = st.sidebar.slider("Contamination (expected % anomalies)", min_value=0.05, max_value=0.3, value=0.1, step=0.05)
+
+if run_anomaly:
+    from anomaly_detector import detect_anomalies_for_country, get_global_anomalies
+    
+    # Country-specific anomaly detection
+    st.write("### Country-specific anomaly analysis")
+    anomaly_country = st.selectbox("Select country for anomaly analysis", 
+                                   rank_df["country"].tolist() if not rank_df.empty else [],
+                                   key="anomaly_country_select")
+    
+    if anomaly_country:
+        with st.spinner(f"Running anomaly detection for {anomaly_country}..."):
+            anomaly_result = detect_anomalies_for_country(base_wide, anomaly_country, contamination)
+        
+        if anomaly_result is not None:
+            # Plot with anomalies highlighted
+            fig_anom = go.Figure()
+            
+            # Measles line + anomalies
+            if "measles" in anomaly_result:
+                fig_anom.add_trace(go.Scatter(
+                    x=anomaly_result["year"], y=anomaly_result["measles"],
+                    mode="lines+markers", name="Measles cases",
+                    line=dict(color="#1f77b4")
+                ))
+                if "measles_anomaly" in anomaly_result:
+                    anom_m = anomaly_result[anomaly_result["measles_anomaly"] == -1]
+                    fig_anom.add_trace(go.Scatter(
+                        x=anom_m["year"], y=anom_m["measles"],
+                        mode="markers", name="Measles anomaly",
+                        marker=dict(size=12, color="red", symbol="x", line=dict(width=2))
+                    ))
+            
+            # Rubella line + anomalies
+            if "rubella" in anomaly_result:
+                fig_anom.add_trace(go.Scatter(
+                    x=anomaly_result["year"], y=anomaly_result["rubella"],
+                    mode="lines+markers", name="Rubella cases",
+                    line=dict(color="#ff7f0e"), yaxis="y2"
+                ))
+                if "rubella_anomaly" in anomaly_result:
+                    anom_r = anomaly_result[anomaly_result["rubella_anomaly"] == -1]
+                    fig_anom.add_trace(go.Scatter(
+                        x=anom_r["year"], y=anom_r["rubella"],
+                        mode="markers", name="Rubella anomaly",
+                        marker=dict(size=12, color="darkred", symbol="x", line=dict(width=2)),
+                        yaxis="y2"
+                    ))
+            
+            fig_anom.update_layout(
+                height=450,
+                yaxis=dict(title="Measles cases"),
+                yaxis2=dict(title="Rubella cases", overlaying="y", side="right"),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02)
+            )
+            st.plotly_chart(fig_anom, use_container_width=True)
+            
+            # Show anomaly details table
+            st.write("#### Detected anomalies")
+            anom_years = anomaly_result[
+                (anomaly_result.get("measles_anomaly", 1) == -1) | 
+                (anomaly_result.get("rubella_anomaly", 1) == -1) |
+                (anomaly_result.get("joint_anomaly", 1) == -1)
+            ][["year", "measles", "rubella", "measles_anomaly_score", "rubella_anomaly_score"]]
+            
+            if not anom_years.empty:
+                st.dataframe(anom_years.style.format({"measles_anomaly_score": "{:.3f}", "rubella_anomaly_score": "{:.3f}"}))
+            else:
+                st.info("No anomalies detected for this country with current settings.")
+else:
+    st.info("Enable anomaly detection in the sidebar to analyze unusual patterns.")
+
 # Download (vertical section)
 st.subheader("Download filtered data")
 if not long_f.empty:
