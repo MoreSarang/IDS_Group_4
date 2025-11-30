@@ -208,6 +208,7 @@ with tab2:
     with col_map:
         # 4) Choropleth Map
         st.subheader("🗺️ Geographic Distribution")
+        st.info("⚠️ Note: Some countries/territories may not appear on the map due to naming variations or political recognition issues in the geographic database. All countries remain available in rankings and country-specific analysis.")
         map_year = st.slider("Select year", min_value=year_range[0], max_value=year_range[1], value=year_range[1], step=1)
         map_df = long_f[long_f["year"]==map_year].groupby("country", as_index=False)["value"].sum()
         
