@@ -182,7 +182,7 @@ with tab2:
     
     with col_rank:
         # 3) Country Rankings
-        st.subheader("🏆 Top Countries")
+        st.subheader("Countries with Highest Reported Cases")
         rank_df = (long_f.groupby("country", as_index=False)["value"].sum().sort_values("value", ascending=False))
         show_top = rank_df.head(int(top_n))
         
@@ -191,7 +191,7 @@ with tab2:
                 show_top, y="country", x="value", 
                 orientation="h",
                 labels={"value":"Total Cases", "country":"Country"},
-                title=f"Top {min(int(top_n), len(show_top))} Countries",
+                title=f"Highest reported cases in top {min(int(top_n), len(show_top))} countries",
                 color="value",
                 color_continuous_scale="Reds"
             )
