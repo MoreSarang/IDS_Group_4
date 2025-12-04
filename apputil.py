@@ -2,6 +2,8 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
+import os
+APP_ENV = os.getenv("APP_ENV", "production")
 
 @st.cache_data(show_spinner=True)
 def _read_excel_from_bytes(file_bytes: bytes) -> pd.DataFrame:
