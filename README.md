@@ -5,7 +5,7 @@
 
 > An interactive web application for exploring global measles and rubella disease trends, regional patterns, and anomaly detection to support public health decision-making.
 
-🌐 **Live App**: [Your Streamlit App URL]
+🌐 **Live App**: https://idsgroup4-eeug6zosmgzbetqsaa37pi.streamlit.app/
 
 **Course:** INFO-H 501 (26346) - Intro to Data Science Programming  
 **Semester:** Fall 2025  
