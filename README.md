@@ -162,6 +162,19 @@ The Measles & Rubella Interactive Dashboard provides public health officials, re
 -Upload the `Measles_Rubella_Final.xlsx` file when prompted.
 -Visualizations will pop up
 
+If you do not want to install packages locally, you can use docker to containerize this app by following these steps:
+- If you do not already have Docker installed, download it from the official website:
+👉 https://www.docker.com/products/docker-desktop/
+Follow the installation instructions for your operating system (Windows, macOS, or Linux).
+- Move to the project folder where Dockerfile is present and run :
+```
+docker build -t <docker image name eg: myproject> .
+```
+- Spin the container up from docker image we created by using following command :
+```
+docker run --rm myproject
+```
+- Go to browser and type localhost:<container-port eg :8501>
 ---
 
 ## Project Structure
