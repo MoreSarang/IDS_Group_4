@@ -12,13 +12,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose the Streamlit port
-EXPOSE 8501
+EXPOSE 8051
 
 # Streamlit configuration to avoid interactive prompts
 ENV STREAMLIT_SERVER_HEADLESS=true \
-    STREAMLIT_SERVER_PORT=8501 \
-    STREAMLIT_SERVER_ENABLECORS=false \
-    STREAMLIT_SERVER_ENABLEXsrfProtection=false
+    STREAMLIT_SERVER_PORT=8051 
 
 # Command to run the app
 CMD ["streamlit", "run", "app.py"]
