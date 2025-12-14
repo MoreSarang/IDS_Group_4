@@ -174,7 +174,7 @@ docker build -t <docker image name eg: myproject> .
 ```
 docker run --rm myproject
 ```
-- Go to browser and type localhost:8501 to access the deployed app.
+- Go to browser and type localhost:8051 to access the deployed app.
 ---
 
 ## Project Structure
